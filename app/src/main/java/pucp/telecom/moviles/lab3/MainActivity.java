@@ -152,9 +152,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getDecibels() {
+    private double getDecibels() {
         Toast.makeText(this, "La medición de ruido ha iniciado", Toast.LENGTH_SHORT).show();
         isRecording = true;
+        GrabadorSonido grabadorSonido = new GrabadorSonido();
+        return grabadorSonido.getAmplitudeEMA();
     }
 
     private void stopMic(){
@@ -235,9 +237,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public double getAmplitudeEMA() {
-            double amp = ObtenerAmplitud();
-            mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
-            return mEMA;
+            return 20 * Math.log10(ObtenerAmplitud());
         }
     }
 }
