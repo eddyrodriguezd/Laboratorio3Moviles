@@ -26,6 +26,7 @@ import java.util.Date;
 import pucp.telecom.moviles.lab3.Entity.Medicion;
 
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -92,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
                 if (location != null) {
                     currentLocationLatitud = location.getLatitude();
                     currentLocationLongitud = location.getLongitude();
+
+                    Toast.makeText(MainActivity.this, "Ubicación actual: " +
+                            currentLocationLatitud + ", " + currentLocationLongitud, Toast.LENGTH_SHORT).show();
                 }
             }
         });
