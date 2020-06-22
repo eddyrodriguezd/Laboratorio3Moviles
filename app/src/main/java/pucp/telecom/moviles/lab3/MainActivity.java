@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonGuardarLocal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragmentGuardarLocal dialogFragment = new DialogFragmentGuardarLocal();
+                Medicion medicion = new Medicion(); // todo aqui se pone la medicion
+                DialogFragmentGuardarLocal dialogFragment = new DialogFragmentGuardarLocal(medicion); //todo enviar aqui la medicion
                 dialogFragment.show(getSupportFragmentManager(), "guardarLocal");
             }
         });
@@ -113,30 +114,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void guardarComoTexto(Medicion medicion) {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
-        String dia = formatter.format(date).substring(0,2);
-        String mes = formatter.format(date).substring(3,5);
-        String anho = formatter.format(date).substring(6,10);
-        String hora = formatter.format(date).substring(11,13);
-        String minuto = formatter.format(date).substring(14,16);
-        String fileName = "medicion_"+dia+mes+anho+"_"+hora+minuto;
-
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
-
-
-        try (FileOutputStream fileOutputStream = new FileOutputStream(file);
-             FileWriter fileWriter = new FileWriter(fileOutputStream.getFD());) {
-            Gson gson = new Gson();
-            String listaComoJson = gson.toJson(medicion);
-            fileWriter.write(listaComoJson);
-            Log.d("infoApp", "Guardado exitoso");
-        } catch (IOException e) {
-            Log.d("infoApp", "Error al guardar");
-            e.printStackTrace();
-        }
-    }
 
 }
