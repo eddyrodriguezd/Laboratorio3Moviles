@@ -46,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
     private int tiempo;
     private double[] mediciones;
 
+    private boolean isRecording= false;
+
+    private static final int REQUEST_CODE_GPS = 44;
+    private static final int REQUEST_CODE_MIC = 55;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,16 +78,40 @@ public class MainActivity extends AppCompatActivity {
                 dialogFragment.show(getSupportFragmentManager(), "guardarRemoto");
             }
         });
+
+        findViewById(R.id.buttonIniciar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMic();
+            }
+        });
+
+        findViewById(R.id.buttonDetener).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(isRecording){
+                    stopMic();
+                }
+            }
+        });
     }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 44) {
+        if (requestCode == REQUEST_CODE_GPS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getCurrentLocation();
             }
         }
+
+        if (requestCode == REQUEST_CODE_MIC) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getDecibels();
+            }
+        }
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -106,11 +136,30 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation();
-        } else { //Request for permission
+        } else { //Solicitar permiso GPS
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_GPS);
         }
+    }
+
+    private void startMic() {
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            getDecibels();
+        } else { //Solicitar permiso micro
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_CODE_MIC);
+        }
+    }
+
+    private void getDecibels() {
+        Toast.makeText(this, "La medición de ruido ha iniciado", Toast.LENGTH_SHORT).show();
+        isRecording = true;
+    }
+
+    private void stopMic(){
+        Toast.makeText(this, "La medición de ruido ha concluido", Toast.LENGTH_SHORT).show();
+        isRecording = false;
     }
 
     public void guardarComoTexto(Medicion medicion) {
