@@ -46,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private int tiempo;
     private double[] mediciones;
 
+    private static final int REQUEST_CODE_GPS = 44;
+    private static final int REQUEST_CODE_MIC = 55;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,16 +76,30 @@ public class MainActivity extends AppCompatActivity {
                 dialogFragment.show(getSupportFragmentManager(), "guardarRemoto");
             }
         });
+
+        findViewById(R.id.buttonIniciar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                useMic();
+            }
+        });
     }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 44) {
+        if (requestCode == REQUEST_CODE_GPS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getCurrentLocation();
             }
         }
+
+        if (requestCode == REQUEST_CODE_MIC) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getDeciBels();
+            }
+        }
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -108,9 +126,22 @@ public class MainActivity extends AppCompatActivity {
             getCurrentLocation();
         } else { //Request for permission
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_GPS);
         }
+    }
+
+    private void useMic() {
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            getDeciBels();
+        } else { //Request for permission
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_CODE_MIC);
+        }
+    }
+
+    private void getDeciBels() {
+        Toast.makeText(this, "MICRO", Toast.LENGTH_SHORT).show();
     }
 
     public void guardarComoTexto(Medicion medicion) {

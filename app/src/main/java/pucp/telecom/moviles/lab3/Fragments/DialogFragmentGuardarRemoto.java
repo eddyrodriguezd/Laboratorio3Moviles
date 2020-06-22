@@ -76,6 +76,7 @@ public class DialogFragmentGuardarRemoto extends androidx.fragment.app.DialogFra
                                 public Map<String, String> getHeaders() throws AuthFailureError {
                                     Map<String, String> headers = new HashMap<>();
                                     headers.put("X-Api-Token", apiKey);
+                                    headers.put("Content-Type", "application/json");
                                     return headers;
                                 }
 
@@ -83,8 +84,8 @@ public class DialogFragmentGuardarRemoto extends androidx.fragment.app.DialogFra
                                 protected Map<String, String> getParams() throws AuthFailureError {
                                     Map<String, String> params = new HashMap<>();
 
-                                    params.put("tiempo", String.valueOf(tiempo));
-                                    params.put("mediciones", Arrays.toString(mediciones));
+                                    params.put("tiempo", "" + tiempo);
+                                    params.put("mediciones", "" + Arrays.toString(mediciones));
                                     params.put("latitud", String.valueOf(latitud));
                                     params.put("longitud", String.valueOf(longitud));
 
