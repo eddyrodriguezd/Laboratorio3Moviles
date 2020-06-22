@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import pucp.telecom.moviles.lab3.entity.Medicion;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
