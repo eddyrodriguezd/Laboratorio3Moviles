@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Lab3</string>
+
+    <string name="AnalizadorRuido">Analizador de Ruido</string>
+
+    <string name="StartM">Iniciar Medición</string>
+    <string name="StopM">Detener Medición</string>
+
+    <string name="CurrentR">Nivel de ruido actual:</string>
+    <string name="ExampleR">## dB</string>
+
+    <string name="LocalSave">Guardar Local</string>
+    <string name="RemoteSave">Guardar Remoto</string>
+
 </resources>
