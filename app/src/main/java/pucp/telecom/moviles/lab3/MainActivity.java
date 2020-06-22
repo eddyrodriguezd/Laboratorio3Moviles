@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private int tiempo;
     private double[] mediciones;
 
+    private boolean isRecording= false;
+
     private static final int REQUEST_CODE_GPS = 44;
     private static final int REQUEST_CODE_MIC = 55;
 
@@ -80,7 +82,17 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonIniciar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                useMic();
+                startMic();
+            }
+        });
+
+        findViewById(R.id.buttonDetener).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(isRecording){
+                    stopMic();
+                }
             }
         });
     }
@@ -96,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_MIC) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getDeciBels();
+                getDecibels();
             }
         }
 
@@ -124,24 +136,30 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation();
-        } else { //Request for permission
+        } else { //Solicitar permiso GPS
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_GPS);
         }
     }
 
-    private void useMic() {
+    private void startMic() {
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            getDeciBels();
-        } else { //Request for permission
+            getDecibels();
+        } else { //Solicitar permiso micro
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_CODE_MIC);
         }
     }
 
-    private void getDeciBels() {
-        Toast.makeText(this, "MICRO", Toast.LENGTH_SHORT).show();
+    private void getDecibels() {
+        Toast.makeText(this, "La medición de ruido ha iniciado", Toast.LENGTH_SHORT).show();
+        isRecording = true;
+    }
+
+    private void stopMic(){
+        Toast.makeText(this, "La medición de ruido ha concluido", Toast.LENGTH_SHORT).show();
+        isRecording = false;
     }
 
     public void guardarComoTexto(Medicion medicion) {
