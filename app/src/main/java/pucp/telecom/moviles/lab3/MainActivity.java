@@ -6,10 +6,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -60,14 +62,14 @@ public class MainActivity extends AppCompatActivity {
         String minuto = formatter.format(date).substring(14,16);
         String fileName = "medicion_"+dia+mes+anho+"_"+hora+minuto;
 
-        try (FileOutputStream fileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
 
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file);
              FileWriter fileWriter = new FileWriter(fileOutputStream.getFD());) {
-
             Gson gson = new Gson();
             String listaComoJson = gson.toJson(medicion);
             fileWriter.write(listaComoJson);
-
             Log.d("infoApp", "Guardado exitoso");
         } catch (IOException e) {
             Log.d("infoApp", "Error al guardar");
