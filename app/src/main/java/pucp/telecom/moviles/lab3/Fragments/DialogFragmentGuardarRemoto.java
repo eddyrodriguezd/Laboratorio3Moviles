@@ -69,7 +69,7 @@ public class DialogFragmentGuardarRemoto extends androidx.fragment.app.DialogFra
                             }, new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.d("Crear", error.getLocalizedMessage());
+
                                 }
                             }) {
                                 @Override
