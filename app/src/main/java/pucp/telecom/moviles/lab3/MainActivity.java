@@ -8,7 +8,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-
+import android.media.MediaRecorder;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -74,6 +74,58 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.d("infoApp", "Error al guardar");
             e.printStackTrace();
+        }
+    }
+
+    public class GrabadorSonido {
+        static final private double EMA_FILTER = 0.6;
+
+        private MediaRecorder mediareco = null;
+        private double mEMA = 0.0;
+
+        public void IniciarMedicion() {
+
+            if (mediareco == null) {
+
+                mediareco = new MediaRecorder();
+                mediareco.setAudioSource(MediaRecorder.AudioSource.MIC);
+                mediareco.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                mediareco.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                //mediareco.setOutputFile("/dev/null");
+
+                try {
+                    mediareco.prepare();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                mediareco.start();
+                mEMA = 0.0;
+            }
+        }
+
+        public void DetenerMedicion() {
+            if (mediareco != null) {
+                mediareco.stop();
+                mediareco.release();
+                mediareco = null;
+            }
+        }
+
+        public double ObtenerAmplitud() {
+            if (mediareco != null)
+                return  (mediareco.getMaxAmplitude()/2700.0);
+            else
+                return 0;
+
+        }
+
+        public double getAmplitudeEMA() {
+            double amp = ObtenerAmplitud();
+            mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
+            return mEMA;
         }
     }
 }
