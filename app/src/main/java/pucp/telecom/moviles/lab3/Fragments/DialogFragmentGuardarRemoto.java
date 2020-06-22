@@ -75,7 +75,7 @@ public class DialogFragmentGuardarRemoto extends androidx.fragment.app.DialogFra
                                 @Override
                                 public Map<String, String> getHeaders() throws AuthFailureError {
                                     Map<String, String> headers = new HashMap<>();
-                                    headers.put("api-key", apiKey);
+                                    headers.put("X-Api-Token", apiKey);
                                     return headers;
                                 }
 
